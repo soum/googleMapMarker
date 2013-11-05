@@ -5,12 +5,58 @@
     <meta charset='utf-8' />
     <meta http-equiv="X-UA-Compatible" content="chrome=1" />
     <meta name="description" content="Googlemapmarker : This project displays markers on the google map from a local JSON array" />
-
+	<script src="http://maps.google.com/maps/api/js?sensor=false" type="text/javascript"></script>
+	
     <title>Googlemapmarker</title>
   </head>
 
   <body>
+<div id="map" style="width: 900px; height: 400px;"></div>
 
-    Test test
+  <script type="text/javascript">
+    var locations = [
+      {
+	   name: 'Colorado', 
+	   xcord: 39, 
+	   ycord: -107,
+	   description: 'Test test test 1'
+	  },
+	  {
+	   name: 'New York', 
+	   xcord: 43.4, 
+	   ycord: -73.24,
+	   description: 'Test test test 2'
+	  }
+    ];
+
+    var map = new google.maps.Map(document.getElementById('map'), {
+      zoom: 4,
+      center: new google.maps.LatLng(39.909736, -98.522109),
+      mapTypeId: google.maps.MapTypeId.ROADMAP
+    });
+
+    var infowindow = new google.maps.InfoWindow();
+
+    var marker, i;
+	var image = 'http://png.findicons.com/files/icons/1490/microserfs_blox/32/red_two.png';
+
+    for (i = 0; i < locations.length; i++) {  
+      marker = new google.maps.Marker({
+        position: new google.maps.LatLng(locations[i].xcord, locations[i].ycord),
+        map: map,
+		icon:image
+      });
+
+      google.maps.event.addListener(marker, 'click', (function(marker, i) {
+        return function() {
+          infowindow.setContent('<div class="name">'+locations[i].name+'</div><div class="description">'+locations[i].description+'</div>');
+          infowindow.open(map, marker);
+        }
+      })(marker, i));
+    }
+  </script>
+  <style>
+  .name{font-size:20px !important;}
+  </style>
   </body>
 </html>
